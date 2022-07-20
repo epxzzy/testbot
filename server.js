@@ -1,14 +1,9 @@
-const { Client } = require("discord.js");
+const { Client } = require("discord.js")
+const express = require("express")
+const server = express()
 const client = new Client({
   intents: ["GUILDS", "GUILD_MESSAGES", "DIRECT_MESSAGES"],
-  partials: ["CHANNEL"],
-  presence: {
-    status: "idle",
-    activity: {
-      name: `With ur mama`,
-      type: "PLAYING",
-    },
-  },
+  partials: ["CHANNEL"]
 });
 const smartestchatbot = require("smartestchatbot");
 const bot = new smartestchatbot.Client();
@@ -123,17 +118,14 @@ client.on("messageCreate", async (message) => {
     });
 });
 client.login(process.env.TOKEN); //login using the token
-const express = require("express")
 
-const server = express()
 
 server.all("/", (req, res) => {
-  res.send("Bot is running!")
+  res.send("YEPP WORKIN")
 })
-
 function runnbitch() {
   server.listen(3000, () => {
-    console.log("Server is ready.")
+    console.log("OI SERVER IS UP")
   })
 }
 runnbitch();
