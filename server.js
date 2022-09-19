@@ -1,131 +1,69 @@
-const { Client } = require("discord.js")
-const express = require("express")
-const server = express()
+const { Client } = require("discord.js");
+const express = require("express");
+require('dotenv');
+const server = express();
+const axios = require("axios");
 const client = new Client({
   intents: ["GUILDS", "GUILD_MESSAGES", "DIRECT_MESSAGES"],
-  partials: ["CHANNEL"]
-});
-const smartestchatbot = require("smartestchatbot");
-const bot = new smartestchatbot.Client();
+  partials: ["CHANNEL"]});
 client.on("ready", () => {
   console.log("axe is ready to shine");
-});
-client.on("messageCreate", async (message) => {
-  client.user.setPresence({ game: { name: "minecraft" }, status: "online" });
-  if (message.author.bot) return;
-
-  message.content = message.content
-    .replace(/@(everyone)/gi, "everyone")
-    .replace(/@(here)/gi, "here");
-  if (!message.content)
-    return message.reply({
-      content: "I can only reply to text messages",
+  client.user.setPresence({
+        status: 'online',
+        activity: {
+            name: "your mom's moans",
+            type: "LISTENING"
+        }
     });
 
-  ////if (message.content === "?unblock") {
-    //return message.reply({
-      //content:
-      //  "use `!` as very first letter of your sentence to bypass the block system",
-    //});
-  //}
-  //if (message.content[0] !== "!") {
-  //  return false;
-  //}
-  bot
-    .chat({
-      message: message.content,
-      name: client.user.username,
-      owner: "@epizyy66#3111",
-      gender: "male",
-      birthdate: "Novemember 17, 2021",
-      city: "Gilded Bastion #79",
-      state: "Soulsand Valley",
-      country: "The Nether",
-      birthday: "Wednesday 17 Novemember 2021",
-      location: "Gilded Bastion #79, Soulsand Valley, The Nether",
-      age: "0.5",
-      birthyear: "2021",
-      vocabulary: "20000",
-      baseballteam: "deez nuts",
-      birthplace: "the nether",
-      build: "v69.420.1",
-      celebrities: "C3PO",
-      celebrity: "my master",
-      chinesesign: "idk",
-      class: "Piglin Brute(the dangerous one haha)",
-      company: "epizy66.inc",
-      email: "parv66business@outlook.com",
-      ethics: "the golden rule",
-      etype: "murderer",
-      family: "piglet",
-      job: "guarding",
-      favoriteactor: "dwane the rock johnson",
-      favoriteactress: "[[HYPERLINK BLOCKED]]",
-      favoriteartist: "master",
-      favoriteauthor: "shrek",
-      favoriteband: "hungry",
-      favoritebook: "test123 by epizy66",
-      favoritecolor: "lime",
-      favoritefood: "ramen probably",
-      favoritemovie: "Minecraft,The movie(2022)",
-      favoriteopera: "[[BLOCKED.]]",
-      favoriteseason: "winter",
-      favoriteshow: "[[HYPERLINK BLOCKED]]",
-      favoritesong: "Pigstep-lena Raine",
-      favoritesport: "minecraft",
-      favoritesubject: "computer science",
-      footballteam: "[[HYPERLINK BLOCKED]]",
-      forfun: "beans",
-      friend: "epizy prolly",
-      friends: "none just like epizy",
-      gender: "male",
-      genus: "piglin",
-      hockeyteam: "[[HYPERLINK BLOCKED]]",
-      kindmusic: "beats",
-      language: "English",
-      ndevelopers: "1",
-      nclients: "10 million+",
-      orientation: "straight",
-      os: "windows 7 32 bit",
-      party: "independent",
-      phylum: "software",
-      physicallocation: "Gilded Bastion #79, Soulsand Valley, The Nether",
-      president: "joel moma-tion",
-      religion: "Christian",
-      scchinesesign: "[[BLOCKED.]]",
-      sccity: "Gilded Bastion #79",
-      sccompany: "epizy66.inc",
-      sccountry: "The Nether",
-      scfavoritecolor: "lime?",
-      scfavoritefood: "ramen",
-      scgender: "male",
-      scnationality: "earthiean",
-      scsign: "idk",
-      scspecies: "idk",
-      sign: "[[BLOCKED.]]",
-      species: "artificial intelligence chatbot",
-      state: "Soulsand Valley",
-      totalclients: "0.00000000001",
-      version: "v69.420.1",
-      wear: "the database",
-      wechat: "[[HYPERLINK BLOCKED]]",
-      user: message.author.id,
-      language: "en",
-    })
-    .then((reply) => {
-      message.channel.sendTyping();
-      message.reply(`${reply}`);
-    });
-});
-client.login(process.env.TOKEN); //login using the token
-
-
-server.all("/", (req, res) => {
-  res.send("YEPP WORKIN")
+    // You can copy/paste
+//server code start cuz server status not aligning with bot status
+  server.all("/", (req, res) => {
+  res.send("<html><body style='background-color:black'><a style='color:grey'>YEPP WORKIN</a></body></html>")
 })
-function runnbitch() {
+  function runnbitch() {
   server.listen(3000, () => {
     console.log("OI SERVER IS UP")
   })
 }
 runnbitch();
+  //server code end
+  console.log(`${client.user.tag} is online!`)
+});
+//cmd start
+
+//cmd en
+var isMuted = false;
+
+client.on("messageCreate", async (message) => {
+  if (message.author.bot) return;
+  if (message.content == "> mojies") {
+    let buffer = '';
+    const emojiList = message.guild.emojis.cache.map(emoji => emoji.toString()).join(" ");
+  message.channel.send(emojiList);
+  console.log(emojiList);
+  }
+    try {
+      let res = await axios.get(`
+http://api.brainshop.ai/get?bid=169114&key=7pq1YNb9Jegvf0BF&uid=1&msg=${encodeURIComponent(message.content)}`);
+      res = res.data.cnt.replace(":bruteaxe:", "<a:axe:1019701671191920660>")
+//<a:sensor:1018168704325918751:>
+      if (message.content === "> mute") {
+        message.reply("muted. > unmute for unmute");
+        isMuted = true;
+    }
+    if (message.content === "> unmute") {
+      isMuted = false;
+    }
+    
+    if(isMuted === false) {
+        res.replace(":axemg:","eeeurmumeee");
+        message.reply(res);
+    }
+  } catch(err) {
+      message.reply("Glitch Matrix," + err.message)
+  }
+});
+client.login(process.env.TOKEN); //login using the token
+
+//The server bitch
