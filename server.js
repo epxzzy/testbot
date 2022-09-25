@@ -1,25 +1,28 @@
 const { Client } = require("discord.js");
 const express = require("express");
 require('dotenv');
+const { ms } = require('./ms.js');
 const server = express();
 const axios = require("axios");
 const client = new Client({
   intents: ["GUILDS", "GUILD_MESSAGES", "DIRECT_MESSAGES"],
-  partials: ["CHANNEL"]});
+  partials: ["CHANNEL"]}); 
+const ttlupt = ms(client.uptime);
 client.on("ready", () => {
   console.log("axe is ready to shine");
   client.user.setPresence({
         status: 'online',
         activity: {
-            name: "your mom's moans",
+            name: "music idk",
             type: "LISTENING"
         }
     });
 
     // You can copy/paste
 //server code start cuz server status not aligning with bot status
+
   server.all("/", (req, res) => {
-  res.send("<html><body style='background-color:black'><a style='color:grey'>YEPP WORKIN</a></body></html>")
+  res.send("<html><body style='background-color:black'><a style='color:grey'>YEPP WORKIN for like "+ ms(client.uptime) + "</a></body></html>")
 })
   function runnbitch() {
   server.listen(3000, () => {
@@ -38,10 +41,14 @@ var isMuted = false;
 client.on("messageCreate", async (message) => {
   if (message.author.bot) return;
   if (message.content == "> mojies") {
-    let buffer = '';
     const emojiList = message.guild.emojis.cache.map(emoji => emoji.toString()).join(" ");
-  message.channel.send(emojiList);
-  console.log(emojiList);
+    message.channel.send(emojiList);
+    console.log(emojiList);
+    return;
+  }
+  if (message.content == "> uptime") {
+    message.reply(ms(client.uptime));
+    return;
   }
     try {
       let res = await axios.get(`
