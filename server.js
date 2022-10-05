@@ -1,4 +1,4 @@
-const { Client } = require("discord.js");
+const { Client, AttachmentBuilder, Util } = require("discord.js");
 const express = require("express");
 require('dotenv');
 const { ms } = require('./ms.js');
@@ -18,7 +18,7 @@ client.on("ready", () => {
         }
     });
 
-    // You can copy/paste
+// You can copy/paste
 //server code start cuz server status not aligning with bot status
 
   server.all("/", (req, res) => {
@@ -39,6 +39,10 @@ runnbitch();
 var isMuted = false;
 
 client.on("messageCreate", async (message) => {
+  message.content = message.content
+    .replace(/@(everyone)/gi, "everyone")
+    .replace(/@(here)/gi, "here");
+  message.content = Util.cleanContent(message.content, message);
   if (message.author.bot) return;
   if (message.content == "> mojies") {
     const emojiList = message.guild.emojis.cache.map(emoji => emoji.toString()).join(" ");
@@ -63,12 +67,14 @@ http://api.brainshop.ai/get?bid=169114&key=7pq1YNb9Jegvf0BF&uid=1&msg=${encodeUR
       isMuted = false;
     }
     
-    if(isMuted === false) {
-        res.replace(":axemg:","eeeurmumeee");
+    if(isMuted === false) { res.replace(":axemg:","eeeurmumeee");
         message.reply(res);
+        //const attachment = new AttachmentBuilder('https://epizy66.github.io/logo.png', { name: 'ticket.png' })
+                           //message.channel.send('test', { files:[attachment] });
     }
   } catch(err) {
-      message.reply("Glitch Matrix," + err.message)
+      message.reply("Glitch Matrix," + err.message + ' called ' + err.name + ' at ' + err.lineNumber + ' cuz ' + err.cause);
+      console.log("Glitch Matrix," + err.message + ' called ' + err.name + ' at ' + err.lineNumber + ' cuz ' + err.cause);
   }
 });
 client.login(process.env.TOKEN); //login using the token
