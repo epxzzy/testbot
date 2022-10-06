@@ -1,4 +1,4 @@
-const { Client, AttachmentBuilder, Util } = require("discord.js");
+const { Client, MessageAttachment, Util, MessageEmbed } = require("discord.js");
 const express = require("express");
 require('dotenv');
 const { ms } = require('./ms.js');
@@ -66,8 +66,15 @@ http://api.brainshop.ai/get?bid=169114&key=7pq1YNb9Jegvf0BF&uid=1&msg=${encodeUR
     if (message.content === "> unmute") {
       isMuted = false;
     }
-    
-    if(isMuted === false) { res.replace(":axemg:","eeeurmumeee");
+    console.log(message)
+    if(isMuted === false) { 
+      if (res.includes(":axemg:")){
+        res = res.replace(":axemg:"," keyword found https://static.wikia.nocookie.net/minecraft_gamepedia/images/e/e2/Golden_Axe_JE3_BE2.png");
+        const axemgdude = new MessageAttachment(`https://epizy66.github.io/logo.png`, { name: 'ticket.png' }),
+        embed = new MessageEmbed().setImage(`https://epizy66.github.io/logo.png`);
+        message.reply(res, { embeds: [embed] , files: [axemgdude]})
+        return;
+      }
         message.reply(res);
         //const attachment = new AttachmentBuilder('https://epizy66.github.io/logo.png', { name: 'ticket.png' })
                            //message.channel.send('test', { files:[attachment] });
