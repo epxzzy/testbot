@@ -4,19 +4,13 @@ require('dotenv');
 const { ms } = require('./ms.js');
 const server = express();
 const axios = require("axios");
+const Database = require("@replit/database");
+const db = new Database();
 const client = new Client({
   intents: ["GUILDS", "GUILD_MESSAGES", "DIRECT_MESSAGES"],
-  partials: ["CHANNEL"]}); 
-const ttlupt = ms(client.uptime);
-client.on("ready", () => {
+  partials: ["CHANNEL"]}); client.on("ready", () => {
+  client.user.setStatus('dnd');
   console.log("axe is ready to shine");
-  client.user.setPresence({
-        status: 'online',
-        activity: {
-            name: "music idk",
-            type: "LISTENING"
-        }
-    });
 
 // You can copy/paste
 //server code start cuz server status not aligning with bot status
@@ -54,6 +48,12 @@ client.on("messageCreate", async (message) => {
     message.reply(ms(client.uptime));
     return;
   }
+  if (message.content == "> reboot") {
+    message.reply("rebooting...");
+    client.user.setStatus('offline');
+    setTimeout(function() { process.exit(); }, 2000);
+    return;
+  }
     try {
       let res = await axios.get(`
 http://api.brainshop.ai/get?bid=169114&key=7pq1YNb9Jegvf0BF&uid=1&msg=${encodeURIComponent(message.content)}`);
@@ -65,14 +65,12 @@ http://api.brainshop.ai/get?bid=169114&key=7pq1YNb9Jegvf0BF&uid=1&msg=${encodeUR
     }
     if (message.content === "> unmute") {
       isMuted = false;
-    }
-    console.log(message)
+  }
     if(isMuted === false) { 
       if (res.includes(":axemg:")){
         res = res.replace(":axemg:"," keyword found https://static.wikia.nocookie.net/minecraft_gamepedia/images/e/e2/Golden_Axe_JE3_BE2.png");
-        const axemgdude = new MessageAttachment(`https://epizy66.github.io/logo.png`, { name: 'ticket.png' }),
-        embed = new MessageEmbed().setImage(`https://epizy66.github.io/logo.png`);
-        message.reply(res, { embeds: [embed] , files: [axemgdude]})
+        const axemgdude = "https://epizy66.github.io/logo.png"
+        message.reply(res, { files: [axemgdude]})
         return;
       }
         message.reply(res);
@@ -80,10 +78,12 @@ http://api.brainshop.ai/get?bid=169114&key=7pq1YNb9Jegvf0BF&uid=1&msg=${encodeUR
                            //message.channel.send('test', { files:[attachment] });
     }
   } catch(err) {
-      message.reply("Glitch Matrix," + err.message + ' called ' + err.name + ' at ' + err.lineNumber + ' cuz ' + err.cause);
-      console.log("Glitch Matrix," + err.message + ' called ' + err.name + ' at ' + err.lineNumber + ' cuz ' + err.cause);
+      message.reply("Glitch Matrix:" + err.toString());
+      console.log("Glitch Matrix:" + err.toString() + " data: " + err.response.data.toString() + " status: " +  err.response.status.toString() + " header: " + err.response.headers.toString());
   }
 });
 client.login(process.env.TOKEN); //login using the token
 
 //The server bitch
+//reset cause axios is a bitch
+//setTimeout( process.exit(), 0.5 * 60 * 1000 * 60);
