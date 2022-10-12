@@ -1,12 +1,13 @@
 const { ms } = require('./ms.js');
 const axios = require("axios");
+const main = require("./server.js");
 const Database = require("@replit/database");
 const db = new Database();
+const msg = "hi";
 const isMuted = db.get("isMuted");
-const msg = ">cmd";
-
-let rply = await axios.get(`
-http://api.brainshop.ai/get?bid=169114&key=7pq1YNb9Jegvf0BF&uid=1&msg=${encodeURIComponent(message.content)}`);
+//exports.ms = function (msg) {
+let rply = axios.get(`
+http://api.brainshop.ai/get?bid=169114&key=7pq1YNb9Jegvf0BF&uid=1&msg=${encodeURIComponent(msg)}`);
 rply = rply.data.cnt;
 //<a:sensor:1018168704325918751:> for skulksensor
 
@@ -45,8 +46,8 @@ try {
           db.set("isMuted", "true").then(() => { 
             console.log("muted");
             return "Muted, >unmute to unmute!";
-        default: 
-          return 'knowncommandtryagainbitch';
+        //default: 
+         // return 'knowncommandtryagainbitch';
         //>unmute, undo the greatest mistake made in mankind
         case 'unmute':
           db.set("isMuted", "false").then(() => { 
@@ -65,14 +66,16 @@ try {
           rply.replace(":axemg:", "image url here");
           return rply;
           break;
-        default: 
-          return '';         
+       // default: 
+   //       return '';         
       }
-    default:
-      return;
+    //default:
+    //  return;
     }
   } 
 catch(err) {
       return "Glitch Matrix:" + err.toString() + " data: " + err.response.data.toString() + " status: " +  err.response.status.toString() + " response: " + err.response.toString();
       console.log("Glitch Matrix:" + err.toString() + " data: " + err.response.data.toString() + " status: " +  err.response.status.toString() + " response: " + err.response.toString());
 }
+//}
+//console.log(rply("hello"));
